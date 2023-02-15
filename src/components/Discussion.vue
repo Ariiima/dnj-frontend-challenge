@@ -8,16 +8,23 @@
           :alt="comment.user.name"
           class="avatar"
         />
-        <img v-else src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" class="avatar" />
+        <!-- PlaceHolder image in case Avatar doesn't exist -->
+        <img
+          v-else
+          src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
+          class="avatar"
+        />
         <span class="name">{{ comment.user.name }}</span>
         <span class="date">{{ formatDate(comment.date) }}</span>
       </div>
       <div class="comment-text">{{ comment.text }}</div>
       <div class="comment-actions">
+        <!-- Like Button -->
         <button class="like-button" @click="toggleLike(comment)">
           <i :class="['like-icon', { liked: comment.iLikedIt }]"></i>
           <span class="likes">{{ comment.likes }}</span>
         </button>
+        <!--Reply Button  -->
         <button class="reply-button" @click="showReply(comment)">
           <i class="reply-icon"></i>
           <span class="reply-text">Reply</span>
@@ -36,13 +43,13 @@
       <div v-if="showReplyForm === comment.id" class="reply-form">
         <img src="../assets/userAvatar.jpeg" class="avatar" />
         <input
-            type="text"
+          type="text"
           v-model="newReplyText"
           class="reply-textarea"
-            placeholder="Write a reply..."
-            v-on:keyup.enter="submitReply(comment.id)"
+          placeholder="Write a reply..."
+          v-on:keyup.enter="submitReply(comment.id)"
           rows="2"
-        >
+        />
         <button class="reply-submit-button" @click="submitReply(comment.id)">
           Submit
         </button>
@@ -57,6 +64,7 @@ import type { IDiscussion, IComment } from "./src/types/IDiscussion";
 
 export default defineComponent({
   name: "Discussion",
+  // Props
   props: {
     comments: {
       type: Array as () => IComment[],
@@ -67,23 +75,30 @@ export default defineComponent({
       default: false,
     },
   },
+  // Emitted events
   emits: ["reply"],
+  // Data
   data() {
     return {
       newReplyText: "",
       showReplyForm: this.showReplyFormProp,
     };
   },
+  // Watchers
   watch: {
     showReplyFormProp(newValue) {
       this.showReplyForm = newValue;
     },
   },
+  // Methods
   methods: {
+
+    // Formats the date to a readable format
     formatDate(date: number) {
       const options = { year: "numeric", month: "long", day: "numeric" };
       return new Date(date).toLocaleDateString(undefined, options);
     },
+
     toggleReplyForm() {
       this.showReplyForm = !this.showReplyForm;
     },
@@ -221,13 +236,13 @@ export default defineComponent({
     }
     .reply-form {
       display: flex;
-      margin-top:1rem;
+      margin-top: 1rem;
       .reply-textarea {
         background-color: rgb(250, 251, 252);
         border-color: rgb(223, 225, 230);
         color: rgb(9, 30, 66);
         cursor: text;
-        margin-right:4px;
+        margin-right: 4px;
         border-radius: 3px;
         border-width: 2px;
         border-style: solid;
